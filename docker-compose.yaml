@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./good-works-service
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3002"  # Открываем только порт для бэкенда
+    environment:
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432  # Используем внутренний порт
+      DATABASE_USER: admin
+      DATABASE_PASSWORD: admin
+      DATABASE_NAME: gwdb
+    depends_on:
+      - postgres
+    networks:
+      - my_network  # Подключаемся к пользовательской сети
+
+  postgres:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: gwdb
+    networks:
+      - my_network  # Подключаемся к пользовательской сети
+
+networks:
+  my_network:  # Создаем пользовательскую сеть
+
+  # project2:
+  #   build:
+  #     context: ./project2
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3002:3000"
+
+    # volumes:
+    #   - postgres_data:/var/lib/postgresql/data
+
+  # app:
+  #   build: .
+  #   ports:
+  #     - 3000:3000
+  #   depends_on:
+  #     - postgres
+  #   environment:
+  #     DATABASE_HOST: postgres
+  #     DATABASE_PORT: 5432
+  #     DATABASE_USER: admin
+  #     DATABASE_PASSWORD: admin
+  #     DATABASE_NAME: gwdb
+
+# volumes:
+#   postgres_data:

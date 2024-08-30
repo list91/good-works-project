@@ -11,23 +11,24 @@ import { FriendsController } from './friends/friends.controller';
 import { TasksController } from './tasks/tasks.controller';
 import { FriendsModule } from './friends/friends.module';
 import { TasksModule } from './tasks/tasks.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import typeorm from './config/typeorm';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'admin', 
-      password: 'admin',
-      database: 'gwdb',
-      entities: [Friends, Users, Tasks],
-      migrations: ["dist/migrations/*{.ts,.js}"],
-      synchronize: true,
-      
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [typeorm]
     }),
-    AuthModule, UsersModule, FriendsModule, TasksModule],
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => (configService.get('typeorm'))
+
+    }),
+    AuthModule, UsersModule, FriendsModule, TasksModule
+  ],
   controllers: [AppController, FriendsController, TasksController],
   providers: [AppService],
 })
 export class AppModule {}
+
