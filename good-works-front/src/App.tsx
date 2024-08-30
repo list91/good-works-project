@@ -8,6 +8,7 @@ import UserPage from './components/UserPage';
 import TaskDetailPage from './components/TaskDetailPage';
 import Header from './components/Header';
 import Cookies from 'js-cookie';
+import RegisterPage from './components/RegisterPage';
 
 const App: React.FC = () => {
   const isAuthenticated = useSelector((state: any) => state.auth.isAuthenticated);
@@ -17,6 +18,7 @@ const App: React.FC = () => {
       <Header/>
       <Routes>
         <Route path="/login" element={<AuthPage />} />
+        <Route path="/register" element={<RegisterPage />} />
         <Route path="/home" element={isAuthenticated ? <HomePage /> : <Navigate to="/login" />} />
         <Route path="/friends" element={isAuthenticated ? <FriendsPage /> : <Navigate to="/login" />} />
         <Route path="/tasks" element={isAuthenticated ? <TasksPage /> : <Navigate to="/login" />} />

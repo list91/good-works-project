@@ -13,12 +13,10 @@ const AuthPage: React.FC = () => {
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-
     try {
       const response = await axios.post(`${API_HOST}/auth/login`, { username, password });
       const token = response.data.access_token;
       const userid = response.data.userid;
-      // console.log(token) http://localhost:3002/auth/profile
       
       Cookies.set('token', token);
       Cookies.set('userid', userid);
@@ -26,7 +24,6 @@ const AuthPage: React.FC = () => {
       navigate('/friends');
     } catch (error) {
       console.log('Неверный логин или пароль');
-      console.log(error);
     }
   };
 
@@ -45,6 +42,9 @@ const AuthPage: React.FC = () => {
         onChange={(e) => setPassword(e.target.value)}
       />
       <button onClick={handleLogin}>Войти</button>
+      <p>
+        У вас нет аккаунта? <button onClick={() => navigate('/register')}>Создать аккаунт</button>
+      </p>
     </div>
   );
 };
