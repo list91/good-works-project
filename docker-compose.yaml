@@ -5,8 +5,8 @@ services:
     build:
       context: ./good-works-service
       dockerfile: Dockerfile
-    ports:
-      - "3001:3002"  # Открываем только порт для бэкенда
+    # ports:
+    #   - "3001:3002"
     environment:
       DATABASE_HOST: postgres
       DATABASE_PORT: 5432  # Используем внутренний порт
@@ -16,7 +16,7 @@ services:
     depends_on:
       - postgres
     networks:
-      - my_network  # Подключаемся к пользовательской сети
+      - my_network
 
   postgres:
     image: postgres:latest
@@ -26,10 +26,19 @@ services:
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: gwdb
     networks:
-      - my_network  # Подключаемся к пользовательской сети
-
+      - my_network
+  frontend:
+    build:
+      context: ./good-works-front
+      dockerfile: Dockerfile
+    environment:
+      BACKEND_ADDRES: backend
+    ports:
+      - "80:80"
+    networks:
+      - my_network  
 networks:
-  my_network:  # Создаем пользовательскую сеть
+  my_network:
 
   # project2:
   #   build:
