@@ -11,6 +11,7 @@ const AuthPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  console.log(API_HOST);
 
   const handleLogin = async () => {
     try {

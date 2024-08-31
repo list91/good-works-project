@@ -7,18 +7,20 @@ import Cookies from 'js-cookie';
 
 const UserPage: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
+  const location = useLocation();
   const { id } = useParams<{ id: string }>();
   const user = useSelector((state: RootState) => state.friends.list.find((user: any) => user.id === Number(id)));
-  const location = useLocation();
   const myid = Cookies.get('userid');
   const isMe = Number(myid) === Number(id);
   const navigate = useNavigate();
 
   const tasks = useSelector((state: RootState) => state.tasks.list);
-  console.log(tasks)
+  console.log(tasks);
+
   useEffect(() => {
-    dispatch(fetchTasks(location.pathname)); // Fetch tasks on component mount
-  }, [dispatch, location.pathname]);
+    // dispatch(fetchTasks(location.pathname)); // Fetch tasks on component mount
+    console.log(323223232332);
+  }, [dispatch]);
 
   return (
     <div className="p-4">
@@ -26,41 +28,39 @@ const UserPage: React.FC = () => {
       {user?.friendId || isMe ? (
         <div>
           <h2>Задачи:</h2>
-          <ul>
+          <ul className="flex flex-col gap-2">
             {tasks.map((task: any) => (
-              <div key={task.id}>
-                <li>{task.content}</li>
+              <div key={task.id} className="flex items-center gap-2">
+                <li className="flex-grow">{task.content}</li>
                 {isMe && (
-                  <div>
-                  <button
-                    onClick={() => navigate(`/task/${task.id}`)} // Правильный путь для навигации
-                    className="border border-gray-300 px-3 py-1 bg-gray-500 text-white hover:bg-red-600 rounded transition mr-2"
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => navigate(`/task/${task.id}`)} 
+                      className="border border-gray-300 px-3 py-1 bg-gray-500 text-white hover:bg-red-600 rounded transition"
                     >
-                    Редактировать
-                  </button>
-                  <button
-                    onClick={() => dispatch(removeTask({id:task.id}))} // Правильный путь для навигации
-                    className="border border-gray-300 px-3 py-1 bg-red-500 text-white hover:bg-red-600 rounded transition mr-2"
+                      Редактировать
+                    </button>
+                    <button
+                      onClick={() => dispatch(removeTask({ id: task.id }))} 
+                      className="border border-gray-300 px-3 py-1 bg-red-500 text-white hover:bg-red-600 rounded transition"
                     >
-                    Удалить
-                  </button>
-                    </div>
-                  
+                      Удалить
+                    </button>
+                  </div>
                 )}
               </div>
             ))}
           </ul>
           {isMe && (
-                  <div>
-                  <button
-                    onClick={() => dispatch(createTask({id: Number(id)}))} // Правильный путь для навигации
-                    className="border border-gray-300 px-3 py-1 bg-gray-500 text-white hover:bg-red-600 rounded transition mr-2"
-                    >
-                    Создать
-                  </button>
-                    </div>
-                  
-                )}
+            <div className="flex items-center gap-2 mt-2">
+              <button
+                onClick={() => dispatch(createTask({ id: Number(id) }))} 
+                className="border border-gray-300 px-3 py-1 bg-gray-500 text-white hover:bg-red-600 rounded transition"
+              >
+                Создать
+              </button>
+            </div>
+          )}
         </div>
       ) : (
         <p>Вы не в друзьях. Добавьте их, чтобы видеть задачи.</p>

@@ -20,7 +20,6 @@ const initialState: FriendsState = {
   list: [],
 };
 
-// Асинхронный запрос для получения друзей
 export const fetchFriends = createAsyncThunk('friends/fetchFriends', async () => {
   const token = Cookies.get('token');
   const userid = Cookies.get('userid');
@@ -38,17 +37,6 @@ export const fetchFriends = createAsyncThunk('friends/fetchFriends', async () =>
   }
 
   const data = await response.json();
-  console.log(data)
-  // const transformedData = data.map((friend: { 
-  //   id: number; 
-  //   friend_tag: string; 
-  //   user_id: number; 
-  // }) => ({
-  //   id: String(friend.id),
-  //   name: friend.friend_tag,
-  //   isFriend: friend.user_id === Number(userid)
-  // }));
-
   if (!Array.isArray(data)) {
     throw new Error('Expected data to be an array');
   }
@@ -56,7 +44,6 @@ export const fetchFriends = createAsyncThunk('friends/fetchFriends', async () =>
   return data;
 });
 
-// Асинхронный запрос для добавления друга
 export const addFriendAndFetch = createAsyncThunk(
   'friends/addFriendAndFetch',
   async ({ friendId, friend_name }: { friendId: number; friend_name: string }, { dispatch }) => {

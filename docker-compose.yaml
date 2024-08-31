@@ -5,11 +5,11 @@ services:
     build:
       context: ./good-works-service
       dockerfile: Dockerfile
-    # ports:
-    #   - "3001:3002"
+    ports:
+      - "3001:3002"
     environment:
       DATABASE_HOST: postgres
-      DATABASE_PORT: 5432  # Используем внутренний порт
+      DATABASE_PORT: 5432
       DATABASE_USER: admin
       DATABASE_PASSWORD: admin
       DATABASE_NAME: gwdb
@@ -34,34 +34,8 @@ services:
     environment:
       BACKEND_ADDRES: backend
     ports:
-      - "80:80"
+      - "3003:80"
     networks:
       - my_network  
 networks:
   my_network:
-
-  # project2:
-  #   build:
-  #     context: ./project2
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "3002:3000"
-
-    # volumes:
-    #   - postgres_data:/var/lib/postgresql/data
-
-  # app:
-  #   build: .
-  #   ports:
-  #     - 3000:3000
-  #   depends_on:
-  #     - postgres
-  #   environment:
-  #     DATABASE_HOST: postgres
-  #     DATABASE_PORT: 5432
-  #     DATABASE_USER: admin
-  #     DATABASE_PASSWORD: admin
-  #     DATABASE_NAME: gwdb
-
-# volumes:
-#   postgres_data:

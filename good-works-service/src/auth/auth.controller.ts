@@ -1,4 +1,3 @@
-
 import {
   Body,
   Controller,
@@ -6,7 +5,7 @@ import {
   HttpCode,
   HttpStatus,
   Post,
-  Request
+  Request,
 } from '@nestjs/common';
 import { AuthGuard, Public } from './auth.guard';
 import { AuthService } from './auth.service';
@@ -20,7 +19,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('login')
   signIn(@Body() signInDto: Record<string, any>) {
-    console.log(signInDto)
+    console.log(signInDto);
     return this.authService.signIn(signInDto.username, signInDto.password);
   }
 
@@ -32,6 +31,19 @@ export class AuthController {
   @Public()
   @Post('register')
   async register(@Body() createUserDto: CreateUserDto) {
-    return this.authService.register(createUserDto);
+    const result = await this.authService.register(createUserDto);
+
+    if (result) {
+      return {
+        statusCode: HttpStatus.CREATED,
+        message: 'User registered successfully',
+        data: result, // если хотите вернуть данные о пользователе
+      };
+    } else {
+      return {
+        statusCode: HttpStatus.BAD_REQUEST,
+        message: 'User registration failed',
+      };
+    }
   }
 }

@@ -1,5 +1,4 @@
 ## BUILD STAGE
-
 FROM node:alpine as build
 
 WORKDIR /usr/src/app
@@ -13,11 +12,9 @@ COPY . .
 RUN yarn build
 
 ## UP NGINX STAGE
-
 FROM nginx:alpine
 
-COPY --from=build /usr/src/app/dist /usr/share/nginx/html
-
+COPY --from=build /usr/src/app/build /usr/share/nginx/html
 COPY --from=build /usr/src/app/nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80

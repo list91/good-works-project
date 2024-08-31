@@ -20,7 +20,7 @@ const initialState: TasksState = {
 };
 
 export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (urlPath: string) => {
-  const token = Cookies.get('token'); // Получаем токен из куки
+  const token = Cookies.get('token');
   const response = await fetch(`${API_HOST}/tasks`, {
     method: 'GET',
     headers: {
@@ -72,39 +72,46 @@ export const updateTask = createAsyncThunk('tasks/updateTask', async ({ id, cont
   });
   return response.json();
 });
-export const removeTask = createAsyncThunk('tasks/removeTask', async ({ id }: { id: number }, {dispatch}) => {
-  // const userid = Cookies.get('userid');
-  console.log(id)
-  const token = Cookies.get('token');
-  const response = await fetch(`${API_HOST}/tasks/${id}`, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-    },
-  });
-  const location = useLocation();
-  console.log(location)
-  return dispatch(fetchTasks(location.pathname));
-});
-export const createTask = createAsyncThunk('tasks/createTask', async ({ id }: { id: number }) => {
-  // const userid = Cookies.get('userid');
-  console.log(id)
-  const token = Cookies.get('token');
-  const response = await fetch(`${API_HOST}/tasks`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-    },
-    body: JSON.stringify({ content: "", master: id }),
-    
-  });
-  const navigate = useNavigate();
-  const data = await response.json();
-  console.log(data)
-  navigate(`/tasks/${data.id}`)
-});
+export const removeTask = createAsyncThunk(
+  'tasks/removeTask',
+  async ({ id }: { id: number }, { dispatch }) => {
+    const token = Cookies.get('token');
+    const response = await fetch(`${API_HOST}/tasks/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to delete task');
+    }
+
+    return { id }; // Возвращаем id для удаления из стейта
+  }
+);
+export const createTask = createAsyncThunk(
+  'tasks/createTask',
+  async ({ id }: { id: number }, { dispatch }) => {
+    const token = Cookies.get('token');
+    const response = await fetch(`${API_HOST}/tasks`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({ content: "новая задача", master: id }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to create task');
+    }
+
+    const data = await response.json();
+    return data; // Возвращаем созданную задачу
+  }
+);
 
 const tasksSlice = createSlice({
   name: 'tasks',
@@ -129,15 +136,13 @@ const tasksSlice = createSlice({
       }
     });
     builder.addCase(removeTask.fulfilled, (state, action) => {
-      // const idToRemove = action.meta.arg.id; // Получаем id из аргумента
-      // state.list = state.list.filter(task => task.id !== idToRemove); // Удаляем задачу из списка
+      const idToRemove = action.payload.id; // Получаем id из возвращаемого значения
+      state.list = state.list.filter(task => task.id !== idToRemove); // Удаляем задачу из списка
     });
     builder.addCase(createTask.fulfilled, (state, action) => {
-      // const idToRemove = action.meta.arg.id; // Получаем id из аргумента
-      // state.list = state.list.filter(task => task.id !== idToRemove); // Удаляем задачу из списка
+      state.list.push(action.payload); // Добавляем новую задачу в список
     });
   },
-  
 });
 
 export default tasksSlice.reducer;
