@@ -2,9 +2,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import Cookies from 'js-cookie';
 import { API_HOST } from '../config';
 import { useLocation, useNavigate } from 'react-router-dom';
-// "id": 13,
-// "content": "2",
-// "master": 2
 interface Task {
   id: number;
   content: string;
@@ -47,7 +44,6 @@ export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (urlPath: s
     master: task.master,
   }))
   .filter((task) => task.master === Number(lastPart));
-  // console.log(transformedData);
 
   return transformedData;
 });
@@ -88,7 +84,7 @@ export const removeTask = createAsyncThunk(
       throw new Error('Failed to delete task');
     }
 
-    return { id }; // Возвращаем id для удаления из стейта
+    return { id }; 
   }
 );
 export const createTask = createAsyncThunk(
@@ -109,7 +105,7 @@ export const createTask = createAsyncThunk(
     }
 
     const data = await response.json();
-    return data; // Возвращаем созданную задачу
+    return data;
   }
 );
 
@@ -136,11 +132,11 @@ const tasksSlice = createSlice({
       }
     });
     builder.addCase(removeTask.fulfilled, (state, action) => {
-      const idToRemove = action.payload.id; // Получаем id из возвращаемого значения
-      state.list = state.list.filter(task => task.id !== idToRemove); // Удаляем задачу из списка
+      const idToRemove = action.payload.id; 
+      state.list = state.list.filter(task => task.id !== idToRemove); 
     });
     builder.addCase(createTask.fulfilled, (state, action) => {
-      state.list.push(action.payload); // Добавляем новую задачу в список
+      state.list.push(action.payload); 
     });
   },
 });

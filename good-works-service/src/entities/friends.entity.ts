@@ -2,7 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, Unique }
 import { Users } from './users.entity';
 
 @Entity()
-@Unique("UQ_user_friend", ["user_id", "friend_id"]) // Уникальное ограничение на комбинацию user_id и friend_id
+@Unique("UQ_user_friend", ["user_id", "friend_id"])
 export class Friends {
   @PrimaryGeneratedColumn()
   id: number;

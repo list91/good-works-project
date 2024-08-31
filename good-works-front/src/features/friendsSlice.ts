@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import Cookies from 'js-cookie'; 
 import { API_HOST } from '../config';
 
-// Конфигурация интерфейсов
 interface Friend {
   id: number;
   username: string;
@@ -55,17 +54,15 @@ export const addFriendAndFetch = createAsyncThunk(
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
       },
-      body: JSON.stringify({ friend_tag: friend_name, user_id: userid, friend_id: friendId }), // Предположим, что отправляем только ID друга
+      body: JSON.stringify({ friend_tag: friend_name, user_id: userid, friend_id: friendId }),
     }
     console.log(req)
-    // Запрос на добавление друга
     const response = await fetch(`${API_HOST}/friends`, req);
 
     if (!response.ok) {
       throw new Error('Could not add friend');
     }
 
-    // После добавления друга обновляем список друзей
     await dispatch(fetchFriends());
   }
 );
@@ -82,14 +79,12 @@ export const removeFriendAndFetch = createAsyncThunk(
       },
     }
     console.log(req)
-    // Запрос на добавление друга
     const response = await fetch(`${API_HOST}/friends/${friendId}`, req);
 
     if (!response.ok) {
       throw new Error('Could not add friend');
     }
 
-    // После добавления друга обновляем список друзей
     await dispatch(fetchFriends());
   }
 );
@@ -103,10 +98,8 @@ const friendsSlice = createSlice({
       state.list = action.payload;
     });
     builder.addCase(addFriendAndFetch.fulfilled, (state, action) => {
-      // Если надо, можно добавить дополнительную логику
     });
     builder.addCase(removeFriendAndFetch.fulfilled, (state, action) => {
-      // Если надо, можно добавить дополнительную логику
     });
   },
 });

@@ -37,7 +37,7 @@ export class AuthController {
       return {
         statusCode: HttpStatus.CREATED,
         message: 'User registered successfully',
-        data: result, // если хотите вернуть данные о пользователе
+        data: result,
       };
     } else {
       return {

@@ -22,11 +22,6 @@ const FriendsPage: React.FC = () => {
     dispatch(removeFriendAndFetch({ friendId: userId }));
   };
 
-  // if (userId && friend.id === parseInt(userId, 10)) {
-  //   const userid = Cookies.get('userid');
-  //   return null;
-  // }
-
   return (
     <div className="p-4">
       <h1 className="text-2xl">Друзья</h1>
@@ -39,12 +34,9 @@ const FriendsPage: React.FC = () => {
       />
       <ul>
         {friends.filter(friend => friend.username.includes(searchTerm)).map(friend => (
-          // if (condition) {
-            
-          // }
           <li key={friend.id} className="flex justify-between items-center my-2">
             <div>{friend.username}</div>
-            {friend.isfriend ? ( // Проверяем, добавлен ли друг
+            {friend.isfriend ? (
               <button
                 onClick={() => handleRemoveFriend(friend.friendId)} 
                 className="border border-gray-300 px-3 py-1 bg-red-500 text-white hover:bg-red-600 rounded transition mr-2"

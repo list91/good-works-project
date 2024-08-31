@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-// import { fetchTasks } from '../features/tasksSlice';
-import { AppDispatch, RootState } from '../app/store'; // Import your types
+import { AppDispatch, RootState } from '../app/store';
 
 const TasksPage: React.FC = () => {
-  const dispatch: AppDispatch = useDispatch(); // Use the typed dispatch
-  const tasks = useSelector((state: RootState) => state.tasks.list); // Use the typed root state
+  const dispatch: AppDispatch = useDispatch();
+  const tasks = useSelector((state: RootState) => state.tasks.list);
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    // dispatch(fetchTasks()); // Fetch tasks on component mount
+    // dispatch(fetchTasks());
   }, [dispatch]);
 
   return (

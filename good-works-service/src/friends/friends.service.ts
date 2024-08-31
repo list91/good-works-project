@@ -51,16 +51,13 @@ export class FriendsService extends TypeOrmCrudService<Friends> {
         }));
     }
     async getAllUsersWithFriendStatus(userId: number): Promise<FriendStatus[]> {
-        // Получаем всех пользователей
         const users = await this.usersRepository.find();
     
-        // Получаем все дружеские связи для данного пользователя
         const friendships = await this.friendsRepository.find({
             where: [{ user: { id: Number(userId) } }, { friend: { id: Number(userId) } }],
             relations: ['friend'],
         });
     
-        // Создаем объект для быстрого поиска идентификаторов дружбы
         const friendMap = new Map<number, { id: number; friendId: number }>();
         friendships.forEach(f => {
             if (f.user.id === Number(userId)) {
@@ -70,15 +67,14 @@ export class FriendsService extends TypeOrmCrudService<Friends> {
             }
         });
     
-        // Формируем список пользователей с их статусом дружбы и идентификатором дружбы
         return users
-            .filter(user => user.id !== Number(userId)) // Пропускаем пользователя с id, равным userId
+            .filter(user => user.id !== Number(userId))
             .map(user => ({
                 id: user.id,
                 username: user.username,
                 userid: user.id,
-                friendId: friendMap.has(user.id) ? friendMap.get(user.id)?.id : null, // Идентификатор дружбы
-                isfriend: friendMap.has(user.id), // Указываем, является ли данный юзер другом
+                friendId: friendMap.has(user.id) ? friendMap.get(user.id)?.id : null,
+                isfriend: friendMap.has(user.id),
             }));
     }
     

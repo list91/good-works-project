@@ -16,15 +16,14 @@ const TaskDetailPage: React.FC = () => {
 
   useEffect(() => {
     if (!id) {
-      // Если id отсутствует, можно перенаправить на страницу задач или обработать ошибку
-      navigate('/tasks'); // Пример: перенаправить, если id нет
+      navigate('/tasks');
       return;
     }
 
     if (task) {
       setContent(task.content);
     } else {
-      dispatch(getTask(id)); // Загрузка задачи
+      dispatch(getTask(id));
     }
   }, [dispatch, id, task]);
 
@@ -32,7 +31,7 @@ const TaskDetailPage: React.FC = () => {
     if (id) {
       dispatch(updateTask({ id, content })).then(() => {
         
-        navigate(`/user/${userid}`); // После сохранения перенаправить на страницы задач
+        navigate(`/user/${userid}`);
       });
     }
   };

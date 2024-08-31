@@ -18,7 +18,7 @@ const UserPage: React.FC = () => {
   console.log(tasks);
 
   useEffect(() => {
-    // dispatch(fetchTasks(location.pathname)); // Fetch tasks on component mount
+    // dispatch(fetchTasks(location.pathname));
     console.log(323223232332);
   }, [dispatch]);
 
