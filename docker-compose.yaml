@@ -6,7 +6,7 @@ services:
       context: ./good-works-service
       dockerfile: Dockerfile
     ports:
-      - "3001:3002"
+      - "3002:3002"
     environment:
       DATABASE_HOST: postgres
       DATABASE_PORT: 5432
